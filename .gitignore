@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+parsetab.py
+lextab.py
+*.smart
+.env
