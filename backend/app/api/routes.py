@@ -16,7 +16,9 @@ def compile_source(payload: CompileRequest):
             "tokens": result.get("tokens", []),
             "ast": result.get("ast", None),
             "errors": result.get("errors", []),
-            "ai_suggestions": result.get("ai_suggestions", [])
+            "ai_suggestions": result.get("ai_suggestions", []),
+            "symbol_table": result.get("symbol_table", None),
+            "output": result.get("output", [])
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

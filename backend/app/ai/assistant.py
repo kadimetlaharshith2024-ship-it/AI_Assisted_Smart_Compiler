@@ -15,7 +15,7 @@ class AIAssistant:
                 f"**AI Assistant Suggestion (Offline Mode):**\n\n"
                 f"**Error Detected:** `{error_message}`\n\n"
                 f"**Tip:** Check your variable declarations, types, or scopes around the error line in your Lumen code. "
-                f"Make sure all variables are declared with `let` and match their expected types (`int`, `float`, `string`, `bool`, or arrays)[cite: 2]."
+                f"Make sure all variables are declared with `let` and match their expected types (`int`, `float`, `string`, `bool`, or arrays)."
             )
 
         prompt = AI_ERROR_EXPLANATION_PROMPT.format(source_code=source_code, error_message=error_message)

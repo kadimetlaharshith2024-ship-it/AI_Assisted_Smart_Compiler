@@ -1,5 +1,6 @@
 from app.core.lexer import build_lexer
 from app.core.parser import parse_code
+from app.core.interpreter import run_program
 from app.semantic.type_checker import TypeChecker
 from app.ai.assistant import AIAssistant
 
@@ -29,18 +30,42 @@ def compile_code_full(source_code: str):
 
     all_errors = lex_errors + parse_errors + semantic_errors
     assistant = AIAssistant()
-    
-    if all_errors:
-        primary_error = all_errors[0]["message"]
-        ai_suggestion = assistant.explain_error(source_code, primary_error)
-        ai_suggestions.append(ai_suggestion)
+
+    # Explain each *distinct* error message (cap to avoid hammering the AI
+    # service / slowing the response down when a program has many errors).
+    MAX_AI_SUGGESTIONS = 3
+    seen_messages = set()
+    for err in all_errors:
+        if len(ai_suggestions) >= MAX_AI_SUGGESTIONS:
+            break
+        message = err["message"]
+        if message in seen_messages:
+            continue
+        seen_messages.add(message)
+        explanation = assistant.explain_error(source_code, message)
+        ai_suggestions.append({
+            "line": err.get("line", 0),
+            "error": message,
+            "explanation": explanation
+        })
+
+    symbol_table = checker.global_scope.to_dict() if (tree and not (lex_errors or parse_errors)) else None
+
+    output = []
+    if tree and not all_errors:
+        try:
+            output = run_program(tree)
+        except Exception as e:
+            output = [f"[Runtime Error] {e}"]
 
     return {
         "tokens": token_stream,
         "ast": tree.to_dict() if tree else None,
         "ast_raw": tree,
         "errors": all_errors,
-        "ai_suggestions": ai_suggestions
+        "ai_suggestions": ai_suggestions,
+        "symbol_table": symbol_table,
+        "output": output
     }
 
 class CompilerService:
