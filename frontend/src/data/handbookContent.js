@@ -24,7 +24,7 @@ block comment
     id: 'variables',
     number: 2,
     title: 'Variables & Types',
-    intro: 'Every variable is declared with let, a name, a :type, and optionally an initial value. You can leave the value out and it gets a type-appropriate default.',
+    intro: 'Every variable is declared with let, a name, a :type, and optionally an initial value. You can leave the value out and it gets a type-appropriate default. An int can be used wherever a float is expected, but nothing else converts automatically.',
     typeTable: [
       { type: 'int', literal: '42', default: '0' },
       { type: 'float', literal: '3.14', default: '0.0' },

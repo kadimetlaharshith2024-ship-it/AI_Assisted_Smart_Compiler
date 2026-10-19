@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import AstNode from './AstTree.jsx'
+import AiSuggestion from './AiSuggestion.jsx'
 
 const TABS = ['Output', 'Tokens', 'AST', 'Symbol Table', 'Errors & AI']
 
-export default function OutputPanel({ result, loading, error }) {
+export default function OutputPanel({ result, loading, error, code, resultId, onApplyFix, editorChanged }) {
   const [tab, setTab] = useState('Output')
 
   const errorCount = result?.errors?.length || 0
@@ -120,10 +121,13 @@ export default function OutputPanel({ result, loading, error }) {
                 </div>
               ))}
               {result.ai_suggestions?.map((s, i) => (
-                <div key={i} className="ai-card">
-                  <div className="ai-card-title">AI explanation \u2014 line {s.line}</div>
-                  <ReactMarkdown>{s.explanation}</ReactMarkdown>
-                </div>
+                <AiSuggestion
+                  key={`${resultId}-${i}`}
+                  suggestion={s}
+                  code={code}
+                  onApplyFix={onApplyFix}
+                  editorChanged={editorChanged}
+                />
               ))}
             </>
           ) : (
