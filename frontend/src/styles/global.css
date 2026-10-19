@@ -464,10 +464,82 @@ button {
   color: var(--text-muted);
 }
 
+.ai-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
 .ai-card-title {
   font-size: 0.72rem;
   color: var(--accent);
-  margin-bottom: 8px;
+}
+
+.ai-tag {
+  font-size: 0.65rem;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+}
+
+.ai-tag.simple {
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.ai-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.ai-simplify-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 5px 12px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.ai-simplify-btn:hover:not(:disabled) {
+  background: rgba(240, 180, 41, 0.1);
+  border-color: var(--accent);
+}
+
+.ai-simplify-btn:disabled {
+  color: var(--text-faint);
+  border-color: var(--border);
+  cursor: wait;
+}
+
+.ai-simplify-btn.subtle {
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.ai-card-error {
+  font-size: 0.78rem;
+  color: var(--error);
+}
+
+.ai-card pre {
+  background: var(--panel-raised);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.ai-card pre code {
+  background: none;
+  padding: 0;
 }
 
 .ai-card p {
@@ -566,4 +638,66 @@ button {
     border-bottom: 1px solid var(--border);
     height: 45vh;
   }
+}
+
+/* ---- verified AI fix ---- */
+
+.ai-fix {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(127, 216, 160, 0.35);
+  background: rgba(127, 216, 160, 0.05);
+  border-radius: var(--radius-sm);
+}
+
+.ai-fix-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ai-fix-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--success);
+  cursor: help;
+}
+
+.ai-fix-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.ai-fix-change {
+  margin-bottom: 8px;
+}
+
+.ai-fix-where {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  margin-bottom: 2px;
+}
+
+.diff-line {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.diff-line.del {
+  background: rgba(232, 100, 106, 0.12);
+  color: var(--error);
+}
+
+.diff-line.add {
+  background: rgba(127, 216, 160, 0.12);
+  color: var(--success);
+}
+
+.ai-fix-actions {
+  margin-top: 8px;
 }

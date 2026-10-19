@@ -1,3 +1,5 @@
+import threading
+
 import ply.yacc as yacc
 from app.core.lexer import tokens, build_lexer
 from app.core.ast import (
@@ -262,8 +264,16 @@ def p_error(p):
 
 parser = yacc.yacc(debug=False, write_tables=False)
 
+# PLY's parser object keeps per-parse state (and we stash `custom_errors` on it),
+# so it is not safe to share between threads. The web server handles requests
+# on a thread pool, and the fix verifier parses several programs concurrently,
+# so every parse takes this lock.
+_parse_lock = threading.Lock()
+
+
 def parse_code(code: str):
-    lexer = build_lexer()
-    parser.custom_errors = []
-    tree = parser.parse(code, lexer=lexer)
-    return tree, lexer.errors, parser.custom_errors
+    with _parse_lock:
+        lexer = build_lexer()
+        parser.custom_errors = []
+        tree = parser.parse(code, lexer=lexer)
+        return tree, lexer.errors, list(parser.custom_errors)

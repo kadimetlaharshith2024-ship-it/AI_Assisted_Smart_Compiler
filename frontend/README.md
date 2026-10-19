@@ -12,8 +12,9 @@ cp .env.example .env   # adjust VITE_API_URL if your backend isn't on :8000
 npm run dev
 ```
 
-Runs at http://localhost:5173. Make sure the backend is running (with the
-CORS fix applied — see the backend repo) at the URL in `.env`.
+Runs at http://localhost:5173. Make sure the backend is running at the URL in
+`.env`. If you serve the frontend from another origin, add it to the backend's
+`CORS_ORIGINS` setting (see the root README).
 
 ## Structure
 
@@ -28,6 +29,7 @@ src/
   components/
     CodeEditor.jsx          CodeMirror wrapper with error-line highlighting
     OutputPanel.jsx         Output / Tokens / AST / Symbol Table / Errors & AI tabs
+    AiSuggestion.jsx        one AI explanation card: "More simplified" button, verified fix + Apply fix
     AstTree.jsx             recursive renderer for the ast JSON tree
   styles/global.css         design tokens + all component styles
 ```
@@ -43,10 +45,10 @@ Add or edit lessons in `src/data/handbookContent.js`. Each lesson supports:
 - `subsections` — for lessons with multiple parts (e.g. Loops: while/for/foreach)
 - `keywords` — optional chip list (used for the Reserved Keywords lesson)
 
-Every example currently in the Handbook has been run against the real
-backend to confirm it compiles and executes without errors — if you add new
-examples, test them against `/api/compile` before shipping, since a broken
-"Try it" button is worse than not having one.
+Every example in the Handbook is checked automatically: the backend test
+`tests/test_handbook_examples.py` reads this file, compiles and runs each
+example, and compares any `expectedOutput`. Run `pytest` in `backend/` after
+editing lessons — a broken "Run in Playground" button is worse than not having one.
 
 ## Known scope limits (by design, for now)
 

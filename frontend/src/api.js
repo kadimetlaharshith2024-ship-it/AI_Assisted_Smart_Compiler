@@ -26,3 +26,24 @@ export async function compileCode(code) {
 
   return res.json()
 }
+
+/**
+ * Asks the backend to explain one compiler error at a given level.
+ * level: 'beginner' | 'simple' ("More simplified": explained to a 15-year-old).
+ * `previous` is the explanation the student found too hard, so the AI can
+ * simplify it instead of starting from scratch.
+ * Returns { line, error, level, explanation, source }.
+ */
+export async function explainError({ code, message, line, level = 'simple', previous = null }) {
+  const res = await fetch(`${API_URL}/api/explain`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code, message, line, level, previous })
+  })
+
+  if (!res.ok) {
+    throw new Error(`Couldn\u2019t get a simpler explanation (status ${res.status})`)
+  }
+
+  return res.json()
+}

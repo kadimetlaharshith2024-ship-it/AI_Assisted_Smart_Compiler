@@ -19,6 +19,10 @@ export default function Playground({ pendingCode, onPendingConsumed }) {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [requestError, setRequestError] = useState(null)
+  // The code that produced `result` (the editor may have changed since), and a
+  // counter so per-run UI state (like the simplified explanation) resets on every run.
+  const [compiledCode, setCompiledCode] = useState(DEFAULT_CODE)
+  const [resultId, setResultId] = useState(0)
 
   useEffect(() => {
     if (pendingCode != null) {
@@ -34,6 +38,8 @@ export default function Playground({ pendingCode, onPendingConsumed }) {
     try {
       const data = await compileCode(code)
       setResult(data)
+      setCompiledCode(code)
+      setResultId((n) => n + 1)
     } catch (err) {
       setRequestError(err.message)
       setResult(null)
@@ -92,7 +98,15 @@ export default function Playground({ pendingCode, onPendingConsumed }) {
           <span>{statusText}</span>
         </div>
       </div>
-      <OutputPanel result={result} loading={loading} error={requestError} />
+      <OutputPanel
+        result={result}
+        loading={loading}
+        error={requestError}
+        code={compiledCode}
+        resultId={resultId}
+        onApplyFix={setCode}
+        editorChanged={code !== compiledCode}
+      />
     </div>
   )
 }
